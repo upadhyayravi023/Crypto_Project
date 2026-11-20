@@ -1,0 +1,6 @@
+user iot
+topic write iot/devices/+/data
+topic write iot/devices/+/status
+topic read iot/devices/+/data
+topic read iot/devices/+/status
+topic read iot/system/security/events

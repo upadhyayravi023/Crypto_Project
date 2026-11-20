@@ -1,0 +1,37 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./config/acl:/mosquitto/config/acl:ro
+      - ./config/passwd:/mosquitto/config/passwd:ro
+      - mosquitto-data:/mosquitto/data
+    restart: unless-stopped
+  receiver:
+    build: .
+    command: ["python", "-m", "scripts.run_receiver"]
+    env_file: .env
+    environment:
+      MQTT_HOST: mosquitto
+      DATABASE_PATH: /app/data/iot.db
+    volumes:
+      - app-data:/app/data
+    depends_on:
+      - mosquitto
+  dashboard:
+    build: .
+    command: ["streamlit", "run", "app/dashboard/main.py", "--server.address=0.0.0.0"]
+    env_file: .env
+    environment:
+      DATABASE_PATH: /app/data/iot.db
+    ports:
+      - "8501:8501"
+    volumes:
+      - app-data:/app/data
+    depends_on:
+      - receiver
+volumes:
+  mosquitto-data:
+  app-data:
