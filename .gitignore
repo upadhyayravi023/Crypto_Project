@@ -1,4 +1,5 @@
 .venv/
+.venv*/
 __pycache__/
 *.py[cod]
 .env
@@ -6,4 +7,5 @@ config/passwd
 data/*.db
 data/*.sqlite*
 .pytest_cache/
+.pytest-temp/
 .streamlit/secrets.toml
