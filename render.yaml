@@ -32,9 +32,6 @@ services:
         sync: false
       - key: MQTT_PASSWORD
         sync: false
-      - key: IOT_API_TOKEN
-        generateValue: true
-
 databases:
   - name: des-iot-db
     databaseName: des_iot

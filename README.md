@@ -93,7 +93,7 @@ The benchmark reports observed average, minimum, maximum, standard deviation and
 
 ## Cloud demo (Render)
 
-Deploy `backend/` as a Render Web Service, then deploy `frontend/` as a Vercel project. The root [`render.yaml`](render.yaml) can provision the FastAPI backend and PostgreSQL database together; configure Vercel's `BACKEND_URL` and `IOT_API_TOKEN` manually. Follow [the deployment guide](docs/deployment_render.md) for the external TLS MQTT broker and secret setup. Free Render hosting is intended for a temporary showcase: web services sleep when idle and the free database expires after 30 days. The Vercel project root directory must be `frontend`.
+Deploy `backend/` as a Render Web Service, then deploy `frontend/` as a Vercel project. The root [`render.yaml`](render.yaml) can provision the FastAPI backend and PostgreSQL database together; configure Vercel's `BACKEND_URL` manually. For this public academic demo, both apps use a hardcoded shared demo token, so no API token environment variable is required. Anyone who can read the repository can call the API; do not use this setup for real or private data. Follow [the deployment guide](docs/deployment_render.md) for the external TLS MQTT broker and secret setup. Free Render hosting is intended for a temporary showcase: web services sleep when idle and the free database expires after 30 days. The Vercel project root directory must be `frontend`.
 
 ## Limitations and future work
 

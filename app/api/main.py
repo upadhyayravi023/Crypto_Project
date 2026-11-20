@@ -46,9 +46,12 @@ async def lifespan(application: FastAPI):
 
 app = FastAPI(title="DES IoT Receiver API", version="1.0.0", lifespan=lifespan)
 
+# Public, demo-only credential. Anyone who can read this repository can call the API.
+DEMO_API_TOKEN = "DES-IOT-DEMO-ONLY-2026"
+
 
 def require_api_token(authorization: str | None = Header(default=None)) -> None:
-    expected = os.getenv("IOT_API_TOKEN", "")
+    expected = DEMO_API_TOKEN
     supplied = authorization.removeprefix("Bearer ") if authorization else ""
     if not expected or not hmac.compare_digest(expected, supplied):
         raise HTTPException(status_code=401, detail="Invalid API token")

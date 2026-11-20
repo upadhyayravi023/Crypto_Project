@@ -12,7 +12,7 @@ Create an [EMQX Cloud Serverless](https://www.emqx.com/en/cloud/serverless-mqtt)
 
 1. In Render, choose **New > Blueprint** and connect `upadhyayravi023/Crypto_Project` on branch `main`.
 2. Select the root `render.yaml` Blueprint. It creates the FastAPI web service and a free Postgres database.
-3. Enter the requested secrets: `DES_KEY_B64`, `HMAC_KEY_B64`, `MQTT_HOST`, `MQTT_USERNAME`, and `MQTT_PASSWORD`. Render generates the internal `IOT_API_TOKEN`.
+3. Enter the requested secrets: `DES_KEY_B64`, `HMAC_KEY_B64`, `MQTT_HOST`, `MQTT_USERNAME`, and `MQTT_PASSWORD`.
 4. Start the deploy. The backend health endpoint is `/health`.
 
 ### Manual service method
@@ -23,7 +23,7 @@ Create a Render **Web Service** from the GitHub repository, branch `main`, with 
 - Start command: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
 - Health check path: `/health`
 
-Create a Render Postgres database in the same region and set its internal connection string as `DATABASE_URL`. Add the variables in [`backend/README.md`](../backend/README.md). Generate `IOT_API_TOKEN` as a long random value.
+Create a Render Postgres database in the same region and set its internal connection string as `DATABASE_URL`. Add the variables in [`backend/README.md`](../backend/README.md).
 
 Generate the two cryptographic keys locally:
 
@@ -31,18 +31,16 @@ Generate the two cryptographic keys locally:
 python -c "import base64,secrets; print('DES_KEY_B64='+base64.b64encode(secrets.token_bytes(8)).decode()); print('HMAC_KEY_B64='+base64.b64encode(secrets.token_bytes(32)).decode())"
 ```
 
-Enter the values into Render's secret environment variables; do not put them in Git or a Vercel `NEXT_PUBLIC_` variable.
+Enter the values into Render's secret environment variables; do not put them in Git.
 
 ## 3. Deploy the frontend on Vercel
 
 1. Import `upadhyayravi023/Crypto_Project` in Vercel.
 2. Set **Root Directory** to `frontend`; use the Next.js preset.
-3. Set the Production environment variables:
-   - `BACKEND_URL`: the Render backend's public HTTPS URL, without a trailing slash.
-   - `IOT_API_TOKEN`: the same token set on the Render backend.
+3. Set the `BACKEND_URL` Production environment variable to the Render backend's public HTTPS URL, without a trailing slash.
 4. Deploy. Vercel installs dependencies from `package.json` and runs `npm run build`.
 
-The token is read by Next.js server route handlers in `frontend/app/api/`; it is never prefixed with `NEXT_PUBLIC_` or exposed in page code.
+For this public academic demo, the frontend proxy and backend share the hardcoded demo token `DES-IOT-DEMO-ONLY-2026`, so no API token environment variable is required. Anyone who can read the repository can use it; do not use this setup for real or private data.
 
 ## Free-tier limits
 

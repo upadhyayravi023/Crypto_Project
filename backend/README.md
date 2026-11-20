@@ -12,7 +12,6 @@ Create a Render Postgres database in the same region and set `DATABASE_URL` to i
 | --- | --- |
 | `DES_KEY_B64` | Base64 for exactly 8 random bytes |
 | `HMAC_KEY_B64` | Base64 for 32 random bytes |
-| `IOT_API_TOKEN` | A long random secret; share it only with the Vercel project environment |
 | `MQTT_ENABLED` | `true` |
 | `MQTT_HOST` | MQTT broker hostname |
 | `MQTT_PORT` | `8883` for a TLS broker |
@@ -21,6 +20,6 @@ Create a Render Postgres database in the same region and set `DATABASE_URL` to i
 | `MQTT_PASSWORD` | Broker password |
 | `MQTT_TOPIC_PREFIX` | `iot` |
 
-The local terminal demonstration does not require MQTT credentials. The Render backend accepts data from the frontend through protected `/api/*` endpoints and receives broker messages when MQTT is enabled.
+The local terminal demonstration does not require MQTT credentials. The Render backend accepts data from the frontend through `/api/*` endpoints and receives broker messages when MQTT is enabled. For this public academic demo, both apps use the hardcoded demo token `DES-IOT-DEMO-ONLY-2026`; anyone who can read the repository can call these API endpoints. Do not use this setup for real or private data.
 
 The same resources can be provisioned from the repository-root `render.yaml` Blueprint. For exact key provisioning and free-tier limits, see [`docs/deployment_render.md`](../docs/deployment_render.md).
