@@ -29,6 +29,7 @@ class Settings:
     broker_port: int = 1883
     broker_username: str | None = None
     broker_password: str | None = None
+    broker_tls: bool = False
     topic_prefix: str = "iot"
     database_path: Path = Path("data/iot.db")
     encryption_key: bytes = b""
@@ -46,6 +47,7 @@ class Settings:
             broker_port=int(os.getenv("MQTT_PORT", "1883")),
             broker_username=os.getenv("MQTT_USERNAME") or None,
             broker_password=os.getenv("MQTT_PASSWORD") or None,
+            broker_tls=os.getenv("MQTT_TLS", "false").strip().lower() in {"1", "true", "yes", "on"},
             topic_prefix=os.getenv("MQTT_TOPIC_PREFIX", "iot").strip("/"),
             database_path=Path(os.getenv("DATABASE_PATH", "data/iot.db")),
             encryption_key=_key_from_env("DES_KEY_B64", 8),

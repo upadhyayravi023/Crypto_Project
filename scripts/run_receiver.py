@@ -10,7 +10,7 @@ def main() -> None:
     configure_logging()
     cfg = Settings.from_env()
     processor = MessageProcessor(EnvelopeCodec(cfg.encryption_key, cfg.authentication_key), Database(cfg.database_path))
-    subscriber = MqttSubscriber(cfg.broker_host, cfg.broker_port, processor, cfg.topic_prefix, cfg.broker_username, cfg.broker_password)
+    subscriber = MqttSubscriber(cfg.broker_host, cfg.broker_port, processor, cfg.topic_prefix, cfg.broker_username, cfg.broker_password, tls=cfg.broker_tls)
     subscriber.start()
     try:
         import threading

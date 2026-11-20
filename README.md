@@ -1,6 +1,6 @@
 # DES Based Secure Communication for IoT Devices
 
-A software-only IoT security simulation. Virtual devices generate sensor readings, encrypt them with DES-CBC, authenticate the full protocol envelope with HMAC-SHA256, and send messages through MQTT or the built-in local simulation. The receiver validates the packet, verifies HMAC before decryption, rejects replayed sequence numbers, and stores accepted readings and security events in SQLite.
+A software-only IoT security simulation. Virtual devices generate sensor readings, encrypt them with DES-CBC, authenticate the full protocol envelope with HMAC-SHA256, and send messages through MQTT or the built-in local simulation. The receiver validates the packet, verifies HMAC before decryption, rejects replayed sequence numbers, and stores accepted readings and security events in SQLite locally or PostgreSQL in the Render deployment.
 
 > **Academic use only:** DES is cryptographically obsolete. This project demonstrates the required DES mechanisms and must not protect real devices or data. Use a modern AEAD cipher such as AES-GCM for production.
 
@@ -17,7 +17,9 @@ Python 3.11+, PyCryptodome, Paho MQTT, Eclipse Mosquitto, SQLite, Streamlit, Pan
 ## Project layout
 
 ```text
-app/                 configuration, devices, crypto, MQTT, receiver, database, security, performance, dashboard
+app/                 application logic, local Streamlit dashboard, FastAPI API
+backend/             Render-ready FastAPI entry point and backend requirements
+frontend/            Vercel-ready Next.js application and server-side API proxy
 config/              environment and Mosquitto examples
 docs/                architecture and security documentation
 scripts/             sender, receiver, local simulation and benchmark entry points
@@ -34,6 +36,12 @@ py -3.11 -m venv .venv
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 Copy-Item config\.env.example .env
+```
+
+Python 3.11 or later works. If the Windows Python launcher cannot find your installation, use its full executable path to create the environment, for example:
+
+```powershell
+& "$env:LOCALAPPDATA\Programs\Python\Python313\python.exe" -m venv .venv
 ```
 
 Edit `.env` and set stable keys. Generate each independently (one 8-byte key and one 32-byte key) with:
@@ -83,6 +91,10 @@ python -m scripts.run_benchmarks --iterations 1000 --payload-bytes 256
 
 The benchmark reports observed average, minimum, maximum, standard deviation and throughput values for local cryptographic envelope processing. It does not claim MQTT latency; measuring that requires a running broker and network and is separate from crypto processing. Results vary by machine and must be generated rather than copied from documentation.
 
+## Cloud demo (Render)
+
+Deploy `backend/` as a Render Web Service, then deploy `frontend/` as a Vercel project. The root [`render.yaml`](render.yaml) can provision the FastAPI backend and PostgreSQL database together; configure Vercel's `BACKEND_URL` and `IOT_API_TOKEN` manually. Follow [the deployment guide](docs/deployment_render.md) for the external TLS MQTT broker and secret setup. Free Render hosting is intended for a temporary showcase: web services sleep when idle and the free database expires after 30 days. The Vercel project root directory must be `frontend`.
+
 ## Limitations and future work
 
-DES has a small key and block size and is unsafe for modern use. CBC encryption is paired with HMAC in this assignment, but the design should migrate to AES-GCM. The default deployment uses a shared key model; production needs per-device keys, rotation and managed provisioning. MQTT TLS and live broker access-control attack automation are not configured. Dashboard attack tools exercise the local receiver pipeline. Future work can add a cipher interface with AES-GCM, broker latency telemetry, per-device identities, TLS, key rotation and richer device registration.
+DES has a small key and block size and is unsafe for modern use. CBC encryption is paired with HMAC in this assignment, but the design should migrate to AES-GCM. The default deployment uses a shared key model; production needs per-device keys, rotation and managed provisioning. Cloud deployment uses TLS for the external MQTT connection; broker access-control attack automation is not included. Local attack tools exercise the receiver pipeline. Future work can add per-device identities, key rotation and richer device registration.

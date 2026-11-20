@@ -13,11 +13,11 @@ logger = logging.getLogger(__name__)
 class MqttSubscriber:
     def __init__(self, host: str, port: int, processor: MessageProcessor, topic_prefix: str = "iot",
                  username: str | None = None, password: str | None = None,
-                 on_reading: Callable[[dict], None] | None = None) -> None:
+                 on_reading: Callable[[dict], None] | None = None, tls: bool = False) -> None:
         self.host, self.port, self.processor = host, port, processor
         self.topic_prefix = topic_prefix.strip("/")
         self.on_reading = on_reading
-        self.client = create_client("iot-receiver", username, password)
+        self.client = create_client("iot-receiver", username, password, tls)
         self.client.on_connect = self._on_connect
         self.client.on_message = self._on_message
 
@@ -37,7 +37,7 @@ class MqttSubscriber:
             logger.exception("MQTT message rejected topic=%s", message.topic)
 
     def start(self) -> None:
-        self.client.connect(self.host, self.port, keepalive=60)
+        self.client.connect_async(self.host, self.port, keepalive=60)
         self.client.loop_start()
 
     def close(self) -> None:

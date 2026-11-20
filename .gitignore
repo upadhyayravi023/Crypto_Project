@@ -9,3 +9,7 @@ data/*.sqlite*
 .pytest_cache/
 .pytest-temp/
 .streamlit/secrets.toml
+node_modules/
+.next/
+out/
+frontend/.env.local

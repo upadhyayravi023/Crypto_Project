@@ -4,7 +4,8 @@ from __future__ import annotations
 from typing import Any
 
 
-def create_client(client_id: str, username: str | None = None, password: str | None = None) -> Any:
+def create_client(client_id: str, username: str | None = None, password: str | None = None,
+                  tls: bool = False) -> Any:
     try:
         import paho.mqtt.client as mqtt
     except ImportError as exc:
@@ -12,4 +13,6 @@ def create_client(client_id: str, username: str | None = None, password: str | N
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id=client_id)
     if username:
         client.username_pw_set(username, password)
+    if tls:
+        client.tls_set()
     return client

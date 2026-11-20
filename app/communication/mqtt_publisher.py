@@ -8,9 +8,9 @@ from .mqtt_client import create_client
 
 class MqttPublisher:
     def __init__(self, host: str, port: int, codec: EnvelopeCodec, topic_prefix: str = "iot",
-                 username: str | None = None, password: str | None = None) -> None:
+                 username: str | None = None, password: str | None = None, tls: bool = False) -> None:
         self.host, self.port, self.codec, self.topic_prefix = host, port, codec, topic_prefix.strip("/")
-        self.client = create_client("iot-publisher", username, password)
+        self.client = create_client("iot-publisher", username, password, tls)
 
     def connect(self) -> None:
         self.client.connect(self.host, self.port, keepalive=60)

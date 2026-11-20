@@ -14,7 +14,7 @@ def main() -> None:
     parser.add_argument("--count", type=int, default=0, help="0 runs until interrupted")
     args = parser.parse_args()
     cfg = Settings.from_env()
-    publisher = MqttPublisher(cfg.broker_host, cfg.broker_port, EnvelopeCodec(cfg.encryption_key, cfg.authentication_key), cfg.topic_prefix, cfg.broker_username, cfg.broker_password)
+    publisher = MqttPublisher(cfg.broker_host, cfg.broker_port, EnvelopeCodec(cfg.encryption_key, cfg.authentication_key), cfg.topic_prefix, cfg.broker_username, cfg.broker_password, cfg.broker_tls)
     devices = SensorSimulator(args.devices)
     sent = 0
     publisher.connect()
