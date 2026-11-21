@@ -1,3 +1,7 @@
+# Project Report - https://drive.google.com/file/d/1RRh5Lj8n3zsx_GGdmpuwtpyZnMh-CZWw/view?usp=drive_link
+
+
+
 # DES Based Secure Communication for IoT Devices
 
 A software-only IoT security simulation. Virtual devices generate sensor readings, encrypt them with DES-CBC, authenticate the full protocol envelope with HMAC-SHA256, and send messages through MQTT or the built-in local simulation. The receiver validates the packet, verifies HMAC before decryption, rejects replayed sequence numbers, and stores accepted readings and security events in SQLite locally or PostgreSQL in the Render deployment.
